@@ -57,7 +57,6 @@ def plotter(mode_0_dict, mode_1_dict, std_dev_0_dict, std_dev_1_dict, modes_size
     try:
         modes_size = int(modes_size)
         sample_size = int(sample_size)
-        print(modes_size, sample_size)
         data_points_0_ = create_data_class(
             modes_size=modes_size,
             sample_size=sample_size,
