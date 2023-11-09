@@ -6,7 +6,8 @@ from matplotlib import pyplot as plt
 def create_data_class(modes_size: int,
                       sample_size: int,
                       mode_intervals: tuple[tuple[float, float], tuple[float, float]],
-                      std_dev_intervals: tuple[tuple[float, float], tuple[float, float]]):
+                      std_dev_intervals: tuple[tuple[float, float], tuple[float, float]],
+                      seed: int = None):
     """
     Creates data class clusters with given mode and standard deviation intervals.
     :param modes_size: Number of clusters
@@ -15,10 +16,11 @@ def create_data_class(modes_size: int,
                            Format is ((low_x, low_y), (high_x, high_y))
     :param std_dev_intervals: Standard deviations are chosen randomly from between those intervals.
                               Format is ((low_x, low_y), (high_x, high_y))
+    :param seed: Seed for random number generator.
     :return: An array of points in a format of pairs of coordinates [[x_0, y_0], [x_1, y_1], ...]
     """
 
-    rng = np.random.default_rng()
+    rng = np.random.default_rng(seed=seed)
 
     modes = rng.uniform(
         low=(mode_intervals[0]),
