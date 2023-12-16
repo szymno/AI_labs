@@ -1,5 +1,3 @@
-from typing import Type
-
 from generator import create_data_class, plot_points
 
 import numpy as np
@@ -21,14 +19,14 @@ class ActivationFunctions:
             return np.ones_like(s)
 
     class Logistic:
-        beta = 0.1
+        beta = -1.
 
         def activation(self, s: np.ndarray[float]) -> np.ndarray[float]:
             return 1. / (1. + np.exp(self.beta * s))
 
         def derivative(self, s: np.ndarray[float]) -> np.ndarray[float]:
             log_func = self.activation(s)
-            return log_func * (1 - log_func)
+            return (log_func * (1 - log_func)) * -1 * self.beta
 
     class Sin:
         @staticmethod
@@ -104,7 +102,7 @@ class Neuron:
     def __init__(self, dimensions: int, activation_class, bias: float):
         self.dimensions = dimensions
         self.bias = bias
-        self.weights = np.zeros((1, dimensions), dtype=float)
+        self.weights = np.ones((1, dimensions), dtype=float) * 0.5
         self.ActivationClass = activation_class()
 
     def create_batches(self,
@@ -165,7 +163,9 @@ class Neuron:
                             rate_min + (rate_max - rate_min) * (1 + np.cos(np.pi * i / i_max))
                     )
                 state = sample @ self.weights.T - self.bias
+
                 result = self.ActivationClass.activation(state)
+
                 error = label - result
 
                 weights_change = np.sum(learning_rate
@@ -216,8 +216,8 @@ if __name__ == '__main__':
 
     samples_norm = (samples_ - np.min(samples_)) / (np.max(samples_) - np.min(samples_))
 
-    neuron = Neuron(2, ActivationFunctions.Sin, 0.6)
-    neuron.train(samples_, labels_, 500, learning_rate=0.0005)
+    neuron = Neuron(2, ActivationFunctions.ReLu, 0.6)
+    neuron.train(samples_, labels_, 100, learning_rate=0.0005, batch_size=1)
     print(neuron.weights)
     fig, ax = plot_points(data_points_0_, data_points_1_)
 
