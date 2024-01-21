@@ -1,9 +1,8 @@
 import pygame
 from typing import Type
 import skfuzzy as fuzz
-import skfuzzy.control as fuzzcontrol
 
-FPS = 60
+FPS = 30
 
 
 class Board:
@@ -249,9 +248,9 @@ class FuzzyMamdamiPlayer(Player):
         y_dist = Antecedent(y_univ, "Y")
         velocity = Consequent(v_univ, "Racket velocity", "centroid")
 
-        x_dist["right"] = trapmf(x_univ, (-800, -800, -40, -32))
-        x_dist["above"] = trapmf(x_univ, (-40, -32, 32, 40))
-        x_dist["left"] = trapmf(x_univ, (32, 40, 800, 800))
+        x_dist["right"] = trapmf(x_univ, (-800, -800, -40, -20))
+        x_dist["above"] = trapmf(x_univ, (-40, -20, 20, 40))
+        x_dist["left"] = trapmf(x_univ, (20, 40, 800, 800))
 
         y_dist["low"] = trapmf(y_univ, (0, 0, 300, 350))
         y_dist["high"] = trapmf(y_univ, (300, 350, 399, 399))
@@ -277,7 +276,7 @@ class FuzzyMamdamiPlayer(Player):
         velocity.view()
         x_dist.view()
         y_dist.view()
-        self.racket_controller.view()
+        # self.racket_controller.view()
         plt.show()
 
     def act(self, x_diff: int, y_diff: int):
@@ -305,9 +304,9 @@ class FuzzyTSKPlayer(Player):
         self.x_dist = {}
         self.y_dist = {}
 
-        self.x_dist["right"] = trapmf(self.x_univ, (-800, -800, -40, -32))
-        self.x_dist["above"] = trapmf(self.x_univ, (-40, -32, 32, 40))
-        self.x_dist["left"] = trapmf(self.x_univ, (32, 40, 800, 800))
+        self.x_dist["right"] = trapmf(self.x_univ, (-800, -800, -40, -20))
+        self.x_dist["above"] = trapmf(self.x_univ, (-40, -20, 20, 40))
+        self.x_dist["left"] = trapmf(self.x_univ, (20, 40, 800, 800))
 
         self.y_dist["low"] = trapmf(self.y_univ, (0, 0, 300, 350))
         self.y_dist["high"] = trapmf(self.y_univ, (300, 350, 399, 399))
@@ -321,9 +320,12 @@ class FuzzyTSKPlayer(Player):
         }
 
         # visualize TSK
-        plt.figure()
+        fig_1, ax_1 = plt.subplots(1)
+        fig_2, ax_2 = plt.subplots(1)
         for name, mf in self.x_dist.items():
-            plt.plot(self.x_univ, mf, label=name)
+            ax_1.plot(self.x_univ, mf, label=name)
+        for name, mf in self.y_dist.items():
+            ax_2.plot(self.y_univ, mf, label=name)
         plt.legend()
         plt.show()
 

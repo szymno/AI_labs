@@ -628,7 +628,7 @@ class AStar(SearchAlgorithm):
                food_position: Position):
 
         visited = set()
-        candidates = PriorityQueue(max_size=10000000)
+        candidates = PriorityQueue(max_size=1000)
         candidates.insert(DirectedPosition(head_position, None, 0))
 
         while candidates.heap_size != 0:
